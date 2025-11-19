@@ -2,15 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import {
-  ShieldCheck,
-  Users,
-  BookOpen,
-  NotebookPen,
-  FileText,
-  PhoneCall,
-  Youtube,
-} from "lucide-react";
+import { ShieldCheck, Users, BookOpen, NotebookPen } from "lucide-react";
 
 export default function Home() {
   return (
@@ -38,7 +30,7 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-6xl">
           {/* Super Admin */}
           <Link
-            href={`/admin`}
+            href={`/auth/admin`}
             className="bg-white text-gray-900 rounded-xl shadow-lg p-6 flex flex-col items-center transition-transform transform hover:-translate-y-1 hover:shadow-2xl border-t-4 border-blue-400"
           >
             <div className="w-16 h-16 flex justify-center mx-auto bg-blue-100 rounded-full items-center text-center mb-4 group-hover:scale-110">
@@ -52,7 +44,7 @@ export default function Home() {
 
           {/* Staff Portal */}
           <Link
-            href={"/staff"}
+            href={"/auth/staff"}
             className="bg-white text-gray-900 rounded-xl shadow-lg p-6 flex flex-col items-center transition-transform transform hover:-translate-y-1 hover:shadow-2xl border-t-4 border-yellow-400"
           >
             <div className="w-16 h-16 flex justify-center mx-auto bg-amber-100 rounded-full items-center text-center mb-4 group-hover:scale-110">
@@ -64,7 +56,7 @@ export default function Home() {
 
           {/* Student Portal */}
           <Link
-            href={"/student"}
+            href={"/auth/student"}
             className="bg-white text-gray-900 rounded-xl shadow-lg p-6 flex flex-col items-center transition-transform transform hover:-translate-y-1 hover:shadow-2xl border-t-4 border-green-400"
           >
             <div className="w-16 h-16 flex justify-center mx-auto bg-green-100 rounded-full items-center text-center mb-4 group-hover:scale-110">
@@ -75,7 +67,7 @@ export default function Home() {
           </Link>
 
           <Link
-            href={"/instructor"}
+            href={"/auth/instructor"}
             className="bg-white text-gray-900 rounded-xl shadow-lg p-6 flex flex-col items-center transition-transform transform hover:-translate-y-1 hover:shadow-2xl border-t-4 border-purple-400"
           >
             <div className="w-16 h-16 flex justify-center mx-auto bg-purple-100 rounded-full items-center text-center mb-4 group-hover:scale-110">

@@ -286,27 +286,8 @@ export default function SuperAdminDashboard() {
 
   return (
     <ProtectedRoute allowedRoles={["admin"]}>
-      <div className="flex min-h-screen bg-[#eff6f9]">
-        <Adminsidebar />
+      <>
         <div className="flex-1 flex flex-col overflow-x-auto">
-          <div className="bg-transparent shadow py-2 mx-2 rounded-2xl sticky md:top-3 top-20 z-40 backdrop-blur-sm flex items-center justify-between min-w-[300px]">
-            <div>
-              <h2 className="ml-4 text-sm sm:text-base md:text-base">
-                Pages / Main Dashboard
-              </h2>
-              <h2 className="ml-4 text-lg sm:text-xl md:text-2xl text-gray-800">
-                Main Dashboard
-              </h2>
-            </div>
-            <div className="flex items-center gap-2 sm:gap-3 md:gap-4 mr-2 sm:mr-3 md:mr-4">
-              <span className="bg-gray-200 text-gray-700 px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium shadow-sm animate-tilt-pulse">
-                Main Branch
-              </span>
-              <Bell className="text-gray-600 w-4 h-4 sm:w-5 sm:h-5 cursor-pointer" />
-              <button onClick={logout}>logout</button>
-              <UserProfile />
-            </div>
-          </div>
           {/* <Fee/> */}
           <main className="p-4 sm:p-6 md:ml-4 space-y-4 md:mt-3 mt-18 min-w-[300px]">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -667,7 +648,7 @@ export default function SuperAdminDashboard() {
             </div>
           </div>
         )}
-      </div>
+      </>
     </ProtectedRoute>
   );
 }

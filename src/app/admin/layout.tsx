@@ -14,21 +14,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`antialiased`}>
-        <AuthProvider>
-          <div className="flex flex-col md:flex-row min-h-screen bg-[#eff6f9]">
-            <Adminsidebar />
-            <div className="flex flex-col flex-1 bg-[#eff6f9]">
-              <AdminHeader
-                breadcrumb="Super Admin / Portal"
-                // title="Add Student"
-              />
-              {children}
-            </div>
-          </div>
-        </AuthProvider>
-      </body>
-    </html>
+    <AuthProvider>
+      <div className="flex flex-col md:flex-row min-h-screen bg-[#eff6f9]">
+        <Adminsidebar />
+        <div className="flex flex-col flex-1 bg-[#eff6f9]">
+          <AdminHeader
+            breadcrumb="Super Admin / Portal"
+            // title="Add Student"
+          />
+          {children}
+        </div>
+      </div>
+    </AuthProvider>
   );
 }
