@@ -125,34 +125,27 @@ export default function VisitorLeadsPage() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row bg-[#eff6f9]">
-      <Adminsidebar />
-      <div className="w-full px-5">
-        <AdminHeader
-          breadcrumb="Super Admin / Visitor Leads"
-          title="Visitor Leads"
+    <>
+      <main className="p-6">
+        <SearchHeader
+          placeholder="Search visitors by name, email, or form ID..."
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          addLabel="Add Visitor"
+          addRedirect="/admin/admission/visitor-portal"
         />
-        <main className="p-6">
-          <SearchHeader
-            placeholder="Search visitors by name, email, or form ID..."
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-            addLabel="Add Visitor"
-            addRedirect="/admin/admission/visitor-portal"
-          />
 
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <DataTable
-              columns={columns}
-              data={visitors}
-              loading={loading}
-              actions={actions}
-              pageSize={5}
-              externalSearch={searchTerm}
-            />
-          </div>
-        </main>
-      </div>
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <DataTable
+            columns={columns}
+            data={visitors}
+            loading={loading}
+            actions={actions}
+            pageSize={5}
+            externalSearch={searchTerm}
+          />
+        </div>
+      </main>
 
       {modalType && selectedVisitor && (
         <UniversalModal
@@ -174,6 +167,6 @@ export default function VisitorLeadsPage() {
           }}
         />
       )}
-    </div>
+    </>
   );
 }

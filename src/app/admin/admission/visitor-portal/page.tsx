@@ -68,9 +68,6 @@ function VisitorPortal() {
     <div className="flex min-h-screen bg-[#f4fafd] overflow-x-hidden relative">
       {/* Sidebar (Desktop + Mobile Drawer) */}
       {/* Desktop */}
-      <div className="hidden md:block w-[250px] min-w-[250px]">
-        <Adminsidebar />
-      </div>
 
       {/* Mobile Drawer */}
       {sidebarOpen && (
@@ -88,12 +85,6 @@ function VisitorPortal() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 px-4 md:px-0">
-        {/* Top Bar */}
-        {/* Use the new AdminHeader component */}
-        <AdminHeader
-          breadcrumb="Super Admin / Add Visitor Leads"
-          title="Add Visitor Leads"
-        />{" "}
         {/* Message Display */}
         {message.text && (
           <div

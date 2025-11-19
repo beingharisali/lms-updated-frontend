@@ -72,29 +72,8 @@ function CoursesPage() {
 
   return (
     <div className="flex min-h-screen bg-[#eff6f9] text-gray-800 relative">
-      {/* Sidebar */}
-      <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-white shadow z-[9999] transition-transform duration-300 transform 
-        ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0`}
-      >
-        <Adminsidebar />
-      </aside>
-
-      {/* Overlay for mobile */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-40 z-[9998] md:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
       {/* Main Content */}
-      <main className="flex-1 ml-0 md:ml-64 pt-6 relative z-10 px-4">
-        {/* Header */}
-        <AdminHeader breadcrumb="Admin / Courses" title="Courses Management" />
-
+      <main className="flex-1 pt-6 relative z-10 px-4">
         {/* Display Records + Add Course */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
           <div className="flex items-center gap-3 flex-wrap">

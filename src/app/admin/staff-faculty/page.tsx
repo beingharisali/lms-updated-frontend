@@ -823,53 +823,46 @@ export default function StaffFacultyPage() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row bg-[#eff6f9]">
-      <Adminsidebar />
-      <div className="w-full px-5">
-        <AdminHeader
-          breadcrumb="Super Admin / Staff & Faculty"
-          title="Staff & Faculty Management"
+    <>
+      <main className="p-6">
+        <SearchHeader
+          placeholder="Search staff & faculty by name, email, or ID..."
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          addLabel="Add Staff"
+          addRedirect="/admin/admission/addstaff"
+          stats={[
+            { label: "Total", count: allData.length },
+            { label: "Staff", count: staff.length, color: "text-blue-600" },
+            {
+              label: "Teachers",
+              count: teacher.length,
+              color: "text-green-600",
+            },
+          ]}
+          filterOptions={[
+            { value: "", label: "All Types" },
+            { value: "staff", label: "Staff Only" },
+            { value: "teacher", label: "Teachers Only" },
+          ]}
+          sortOptions={[
+            { value: "name", label: "Name" },
+            { value: "type", label: "Type" },
+            { value: "date", label: "Date Added" },
+          ]}
         />
-        <main className="p-6">
-          <SearchHeader
-            placeholder="Search staff & faculty by name, email, or ID..."
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-            addLabel="Add Staff"
-            addRedirect="/admin/admission/addstaff"
-            stats={[
-              { label: "Total", count: allData.length },
-              { label: "Staff", count: staff.length, color: "text-blue-600" },
-              {
-                label: "Teachers",
-                count: teacher.length,
-                color: "text-green-600",
-              },
-            ]}
-            filterOptions={[
-              { value: "", label: "All Types" },
-              { value: "staff", label: "Staff Only" },
-              { value: "teacher", label: "Teachers Only" },
-            ]}
-            sortOptions={[
-              { value: "name", label: "Name" },
-              { value: "type", label: "Type" },
-              { value: "date", label: "Date Added" },
-            ]}
-          />
 
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <DataTable
-              columns={columns}
-              data={allData}
-              loading={loading}
-              actions={actions}
-              pageSize={10}
-              externalSearch={searchTerm}
-            />
-          </div>
-        </main>
-      </div>
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <DataTable
+            columns={columns}
+            data={allData}
+            loading={loading}
+            actions={actions}
+            pageSize={10}
+            externalSearch={searchTerm}
+          />
+        </div>
+      </main>
 
       {modalType && selectedMember && (
         <UniversalModal
@@ -904,6 +897,6 @@ export default function StaffFacultyPage() {
           }}
         />
       )}
-    </div>
+    </>
   );
 }

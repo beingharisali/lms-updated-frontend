@@ -115,12 +115,6 @@ function Adminsidebar() {
       label: "Zeta AI",
       roles: ["student"],
     },
-    {
-      href: "/instructor-payments",
-      icon: <FaMoneyBillWave />,
-      label: "Instructor Payments",
-      roles: ["superadmin"],
-    },
   ];
 
   const filteredNavItems = navItems.filter((item) => {

@@ -1,11 +1,11 @@
-"use client"
+"use client";
 import { useState } from "react";
 import { useEffect } from "react";
 import ProtectedRoute from "../ProtectedRoute";
 import Adminsidebar from "../Adminsidebar";
 import AdminHeader from "../AdminHeader";
 import { Eye, EyeOff, RotateCcw } from "lucide-react";
-import http from "@/services/http"; 
+import http from "@/services/http";
 
 const AddStudents = () => {
   const [studentId, setStudentId] = useState(
@@ -42,7 +42,7 @@ const AddStudents = () => {
       amountPaid: 0,
       enrolledDate: new Date().toISOString().split("T")[0],
       SubmitFee: "",
-      customPaymentMethod: "",  // ✅ new field
+      customPaymentMethod: "", // ✅ new field
     },
     emergencyContact: {
       name: "",
@@ -66,7 +66,7 @@ const AddStudents = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => {
-      const newData = JSON.parse(JSON.stringify(prev)); 
+      const newData = JSON.parse(JSON.stringify(prev));
       setNestedValue(newData, name, value);
       return newData;
     });
@@ -117,16 +117,14 @@ const AddStudents = () => {
     return () => controller.abort();
   }, []);
 
-
-
-   const [files, setFiles] = useState({
+  const [files, setFiles] = useState({
     photo: null,
     studentCnicBForm: null,
     parentCnic: null,
     medicalRecords: null,
     additionalDocuments: null,
   });
- 
+
   const [fileStatus, setFileStatus] = useState({
     photo: "No file chosen",
     studentCnicBForm: "No file chosen",
@@ -134,7 +132,6 @@ const AddStudents = () => {
     medicalRecords: "No file chosen",
     additionalDocuments: "No file chosen",
   });
-
 
   const generateID = () => {
     const id = "STD" + Math.floor(100 + Math.random() * 900);
@@ -167,7 +164,7 @@ const AddStudents = () => {
 
     try {
       const submitData = new FormData();
-      console.log('testing')
+      console.log("testing");
 
       submitData.append("studentId", studentId);
       submitData.append("fullName", formData.fullName);
@@ -182,15 +179,15 @@ const AddStudents = () => {
       submitData.append("parentGuardian[phone]", formData.parentGuardian.phone);
       submitData.append("courses[csr]", formData.courses.csr);
       submitData.append("courses[SubmitFee]", formData.courses.SubmitFee);
-      submitData.append("courses[customPaymentMethod]", formData.courses.customPaymentMethod);
+      submitData.append(
+        "courses[customPaymentMethod]",
+        formData.courses.customPaymentMethod
+      );
       submitData.append(
         "courses[selectedCourse]",
         formData.courses.selectedCourse
       );
-      submitData.append(
-        "courses[batch]",
-        formData.courses.batch.toString()
-      );
+      submitData.append("courses[batch]", formData.courses.batch.toString());
       submitData.append(
         "courses[totalFees]",
         formData.courses.totalFees.toString()
@@ -260,7 +257,8 @@ const AddStudents = () => {
           feePerInstallment: 0,
           amountPaid: 0,
           enrolledDate: new Date().toISOString().split("T")[0],
-          SubmitFee: ""},
+          SubmitFee: "",
+        },
         emergencyContact: { name: "", relationship: "", phoneNumber: "" },
       }));
 
@@ -294,14 +292,14 @@ const AddStudents = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-[#eff6f9]">
-      <Adminsidebar />
+    <>
+      {/* <Adminsidebar /> */}
 
-      <div className="flex flex-col flex-1 bg-[#eff6f9]">
-        <AdminHeader
+      <>
+        {/* <AdminHeader
           breadcrumb="Super Admin / Add Student"
           title="Add Student"
-        />
+        /> */}
         <div className="flex-1 md:mt-8 mt-24 overflow-y-auto px-6">
           {message.text && (
             <div
@@ -581,9 +579,11 @@ const AddStudents = () => {
                     value={formData.courses.selectedCourse}
                     onChange={(e) => {
                       handleInputChange(e);
-                      const selectedCourse = courses.find(c => c.name === e.target.value);
+                      const selectedCourse = courses.find(
+                        (c) => c.name === e.target.value
+                      );
                       if (selectedCourse) {
-                        setFormData(prev => ({
+                        setFormData((prev) => ({
                           ...prev,
                           courses: {
                             ...prev.courses,
@@ -714,8 +714,11 @@ const AddStudents = () => {
                   className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none cursor-pointer"
                 ></input>
               </div>
-              {/* <div>
-                <label className="text-sm font-medium text-gray-500">Payment Method</label>
+
+              <div className="flex-3">
+                <label className="text-sm font-medium text-gray-500">
+                  Payment Method
+                </label>
                 <select
                   name="courses.SubmitFee"
                   placeholder="Select Type"
@@ -723,53 +726,31 @@ const AddStudents = () => {
                   onChange={handleInputChange}
                   required
                   className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                > 
-                  
+                >
+                  <option value="">Select Payment Method</option>
                   <option value="Cash">Cash</option>
                   <option value="Jazz Cash">Jazz Cash</option>
                   <option value="Custom">Add Custom Payment Method</option>
-                  
                 </select>
-              </div> */}
+              </div>
 
-  <div className="flex-3">
-    <label className="text-sm font-medium text-gray-500">
-      Payment Method
-    </label>
-    <select
-      name="courses.SubmitFee"
-      placeholder="Select Type"
-      value={formData.courses.SubmitFee}
-      onChange={handleInputChange}
-      required
-      className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-    >
-      <option value="">Select Payment Method</option>
-      <option value="Cash">Cash</option>
-      <option value="Jazz Cash">Jazz Cash</option>
-      <option value="Custom">Add Custom Payment Method</option>
-    </select>
-  </div>
-
-  {/* ✅ Input appears side-by-side when "Custom" is selected */}
-  {formData.courses.SubmitFee === "Custom" && (
-    <div className="flex-2">
-      <label className="text-sm font-medium text-gray-500">
-        Custom Method
-      </label>
-      <input
-        type="text"
-        name="courses.customPaymentMethod"
-        value={formData.courses.customPaymentMethod || ""}
-        onChange={handleInputChange}
-        placeholder="e.g., Bank Transfer"
-        className="w-full border border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-        required
-      />
-    </div>
-  )}
-
-
+              {/* ✅ Input appears side-by-side when "Custom" is selected */}
+              {formData.courses.SubmitFee === "Custom" && (
+                <div className="flex-2">
+                  <label className="text-sm font-medium text-gray-500">
+                    Custom Method
+                  </label>
+                  <input
+                    type="text"
+                    name="courses.customPaymentMethod"
+                    value={formData.courses.customPaymentMethod || ""}
+                    onChange={handleInputChange}
+                    placeholder="e.g., Bank Transfer"
+                    className="w-full border border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+                    required
+                  />
+                </div>
+              )}
             </div>
 
             <div className="rounded-lg bg-gray-50 p-4 shadow-sm mt-6">
@@ -969,8 +950,8 @@ const AddStudents = () => {
             </div>
           </form>
         </div>
-      </div>
-    </div>
+      </>
+    </>
   );
 };
 

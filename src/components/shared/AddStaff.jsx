@@ -259,504 +259,492 @@ const AddStaff = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-[#eff6f9]">
-      <Adminsidebar />
+    <>
+      {/* Scrollable Content */}
+      <div className="flex-1 md:mt-8 mt-24 overflow-y-auto px-6">
+        {message.text && (
+          <div
+            className={`mb-4 p-3 rounded-md ${
+              message.type === "success"
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800"
+            }`}
+          >
+            {message.text}
+          </div>
+        )}
 
-      <div className="flex flex-col flex-1 bg-[#eff6f9]">
-        {/* Use the new AdminHeader component */}
-        <AdminHeader
-          breadcrumb="Super Admin / Add Staff"
-          title="Add Staff"
-        />{" "}
-        {/* Scrollable Content */}
-        <div className="flex-1 md:mt-8 mt-24 overflow-y-auto px-6">
-          {message.text && (
-            <div
-              className={`mb-4 p-3 rounded-md ${
-                message.type === "success"
-                  ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800"
-              }`}
-            >
-              {message.text}
-            </div>
-          )}
-
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* Staff Information Section */}
-            <div className="grid mb-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {/* First Name Field */}
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  First Name*
-                </label>
-                <input
-                  type="text"
-                  name="firstName"
-                  placeholder="First Name"
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              {/* Last Name Field */}
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  name="lastName"
-                  placeholder="Last Name"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              {/* Date of Birth Field */}
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Date of Birth
-                </label>
-                <input
-                  type="date"
-                  name="dateOfBirth"
-                  value={formData.dateOfBirth}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none cursor-pointer"
-                />
-              </div>
-
-              {/* Gender Field */}
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Gender*
-                </label>
-                <select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none text-gray-700"
-                >
-                  <option value="" className="text-gray-400">
-                    Select Gender
-                  </option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-
-              {/* Phone Field */}
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Phone*
-                </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  placeholder="Phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                  onKeyDown={(e) => {
-                    const allowedKeys = [
-                      "Backspace",
-                      "Delete",
-                      "ArrowLeft",
-                      "ArrowRight",
-                      "Tab",
-                    ];
-                    if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
-                      e.preventDefault();
-                    }
-                  }}
-                  onInput={(e) => {
-                    e.target.value = e.target.value.replace(/\D/g, "");
-                  }}
-                />
-              </div>
-
-              {/* Email Field */}
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Email*
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              {/* Password Field - ADDED */}
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Password*
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    placeholder="Password (min 6 characters)"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    required
-                    minLength={6}
-                    className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none pr-10"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-                <p className="text-xs text-gray-500">Minimum 6 characters</p>
-              </div>
-
-              {/* CNIC Field */}
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  CNIC (with dashes)*
-                </label>
-                <input
-                  type="text"
-                  name="cnic"
-                  placeholder="12345-6789012-3"
-                  value={formData.cnic}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                  maxLength="15"
-                  onInput={(e) => {
-                    let value = e.target.value.replace(/\D/g, "");
-                    if (value.length > 5) {
-                      value = value.substring(0, 5) + "-" + value.substring(5);
-                    }
-                    if (value.length > 13) {
-                      value =
-                        value.substring(0, 13) + "-" + value.substring(13);
-                    }
-                    if (value.length > 15) {
-                      value = value.substring(0, 15);
-                    }
-                    e.target.value = value;
-                  }}
-                />
-              </div>
-
-              <div className="md:col-span-2 lg:col-span-3 flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Address
-                </label>
-                <textarea
-                  name="address"
-                  placeholder="Address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none min-h-[100px]"
-                ></textarea>
-              </div>
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          {/* Staff Information Section */}
+          <div className="grid mb-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {/* First Name Field */}
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                First Name*
+              </label>
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
             </div>
 
-            {/* Qualification Section */}
-            <div className="text-white font-semibold bg-[#353a40] rounded-lg px-4 text-center shadow-sm">
-              Qualification
+            {/* Last Name Field */}
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Last Name
+              </label>
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
             </div>
 
-            <div className="grid mb-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Education*
-                </label>
-                <input
-                  type="text"
-                  name="qualification.education"
-                  placeholder="Education Level"
-                  value={formData.qualification.education}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Institute*
-                </label>
-                <input
-                  type="text"
-                  name="qualification.institute"
-                  placeholder="Institute Name"
-                  value={formData.qualification.institute}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Year of Passing*
-                </label>
-                <input
-                  type="text"
-                  name="qualification.yearOfPassing"
-                  placeholder="YYYY"
-                  value={formData.qualification.yearOfPassing}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                  maxLength="4"
-                  onInput={(e) => {
-                    e.target.value = e.target.value.replace(/\D/g, "");
-                  }}
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Designation*
-                </label>
-                <input
-                  type="text"
-                  name="qualification.designation"
-                  placeholder="Designation/Role"
-                  value={formData.qualification.designation}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
+            {/* Date of Birth Field */}
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Date of Birth
+              </label>
+              <input
+                type="date"
+                name="dateOfBirth"
+                value={formData.dateOfBirth}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none cursor-pointer"
+              />
             </div>
 
-            {/* Authorities/Permissions Section */}
-            <div className="text-white font-semibold bg-[#353a40] rounded-lg px-4 text-center shadow-sm mt-6">
-              Authorities & Permissions
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Object.entries(formData.authorities).map(
-                  ([category, permissions]) => (
-                    <div key={category} className="border rounded-lg p-4">
-                      <h3 className="font-medium text-gray-700 mb-3 capitalize">
-                        {category.replace(/([A-Z])/g, " $1")}
-                      </h3>
-                      <div className="space-y-3">
-                        {Object.entries(permissions).map(([permission]) => (
-                          <div
-                            key={permission}
-                            className="flex items-center justify-between"
-                          >
-                            <label className="text-sm text-gray-600 capitalize">
-                              {permission}
-                            </label>
-                            <label className="relative inline-flex items-center cursor-pointer">
-                              <input
-                                type="checkbox"
-                                checked={
-                                  formData.authorities[category][permission]
-                                }
-                                onChange={(e) =>
-                                  handleAuthorityChange(
-                                    category,
-                                    permission,
-                                    e.target.checked
-                                  )
-                                }
-                                className="sr-only peer"
-                              />
-                              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
-
-            {/* Emergency Contact Form */}
-            <div className="text-white font-semibold bg-[#353a40] rounded-lg px-4 text-center shadow-sm mt-6">
-              Emergency Contact Form
-            </div>
-
-            <div className="grid mb-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  name="emergencyContact.name"
-                  placeholder="-"
-                  value={formData.emergencyContact.name}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Relationship
-                </label>
-                <input
-                  type="text"
-                  name="emergencyContact.relationship"
-                  placeholder="-"
-                  value={formData.emergencyContact.relationship}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Phone Number
-                </label>
-                <input
-                  type="text"
-                  name="emergencyContact.phoneNumber"
-                  placeholder="-"
-                  value={formData.emergencyContact.phoneNumber}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                  onKeyDown={(e) => {
-                    const allowedKeys = [
-                      "Backspace",
-                      "Delete",
-                      "ArrowLeft",
-                      "ArrowRight",
-                      "Tab",
-                    ];
-                    if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
-                      e.preventDefault();
-                    }
-                  }}
-                  onInput={(e) => {
-                    e.target.value = e.target.value.replace(/\D/g, "");
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Related Documents */}
-            <div className="text-white font-semibold bg-[#353a40] rounded-lg px-4 text-center shadow-sm mt-6">
-              Related Documents
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  CNIC Document
-                </label>
-                <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
-                  <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
-                    Choose file
-                    <input
-                      type="file"
-                      className="hidden"
-                      onChange={(e) => handleFileChange(e, "cnicDocument")}
-                    />
-                  </label>
-                  <div className="flex-1 px-4 py-2.5 text-gray-400 overflow-hidden">
-                    <span>{fileStatus.cnicDocument}</span>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500">Max Size:1MB.</p>
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Medical Records
-                </label>
-                <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
-                  <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
-                    Choose file
-                    <input
-                      type="file"
-                      className="hidden"
-                      onChange={(e) => handleFileChange(e, "medicalRecords")}
-                    />
-                  </label>
-                  <div className="flex-1 px-4 py-2.5 text-gray-400 overflow-hidden">
-                    <span>{fileStatus.medicalRecords}</span>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500">Max Size:1MB.</p>
-              </div>
-
-              <div className="flex flex-col gap-y-2 md:col-span-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Additional Documents
-                </label>
-                <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
-                  <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
-                    Choose file
-                    <input
-                      type="file"
-                      multiple
-                      className="hidden"
-                      onChange={(e) => {
-                        const selectedFiles = Array.from(e.target.files || []);
-                        const fileName =
-                          selectedFiles.length > 0
-                            ? selectedFiles.length === 1
-                              ? selectedFiles[0].name
-                              : `${selectedFiles.length} files selected`
-                            : "No file chosen";
-
-                        setFileStatus((prev) => ({
-                          ...prev,
-                          additionalDocuments: fileName,
-                        }));
-
-                        setFiles((prev) => ({
-                          ...prev,
-                          additionalDocuments: e.target.files[0],
-                        }));
-                      }}
-                    />
-                  </label>
-                  <div className="flex-1 px-4 py-2.5 text-gray-400 overflow-hidden">
-                    <span>{fileStatus.additionalDocuments}</span>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500">Max Size:1MB.</p>
-              </div>
-            </div>
-
-            {/* Save Button */}
-            <div className="text-center">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-[#067954] text-white font-semibold cursor-pointer my-4 w-full px-6 py-2.5 rounded-xl transition-all duration-300 hover:bg-[#353a40] flex items-center justify-center gap-3 shadow-md hover:shadow-lg active:scale-[98%] disabled:opacity-70 disabled:cursor-not-allowed"
+            {/* Gender Field */}
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Gender*
+              </label>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none text-gray-700"
               >
-                {isSubmitting ? (
-                  <span className="tracking-wide">Processing...</span>
-                ) : (
-                  <span className="tracking-wide">Save</span>
-                )}
-              </button>
+                <option value="" className="text-gray-400">
+                  Select Gender
+                </option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
-          </form>
-        </div>
+
+            {/* Phone Field */}
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Phone*
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+                onKeyDown={(e) => {
+                  const allowedKeys = [
+                    "Backspace",
+                    "Delete",
+                    "ArrowLeft",
+                    "ArrowRight",
+                    "Tab",
+                  ];
+                  if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/\D/g, "");
+                }}
+              />
+            </div>
+
+            {/* Email Field */}
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Email*
+              </label>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+
+            {/* Password Field - ADDED */}
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Password*
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Password (min 6 characters)"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                  minLength={6}
+                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              <p className="text-xs text-gray-500">Minimum 6 characters</p>
+            </div>
+
+            {/* CNIC Field */}
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                CNIC (with dashes)*
+              </label>
+              <input
+                type="text"
+                name="cnic"
+                placeholder="12345-6789012-3"
+                value={formData.cnic}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+                maxLength="15"
+                onInput={(e) => {
+                  let value = e.target.value.replace(/\D/g, "");
+                  if (value.length > 5) {
+                    value = value.substring(0, 5) + "-" + value.substring(5);
+                  }
+                  if (value.length > 13) {
+                    value = value.substring(0, 13) + "-" + value.substring(13);
+                  }
+                  if (value.length > 15) {
+                    value = value.substring(0, 15);
+                  }
+                  e.target.value = value;
+                }}
+              />
+            </div>
+
+            <div className="md:col-span-2 lg:col-span-3 flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Address
+              </label>
+              <textarea
+                name="address"
+                placeholder="Address"
+                value={formData.address}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none min-h-[100px]"
+              ></textarea>
+            </div>
+          </div>
+
+          {/* Qualification Section */}
+          <div className="text-white font-semibold bg-[#353a40] rounded-lg px-4 text-center shadow-sm">
+            Qualification
+          </div>
+
+          <div className="grid mb-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Education*
+              </label>
+              <input
+                type="text"
+                name="qualification.education"
+                placeholder="Education Level"
+                value={formData.qualification.education}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Institute*
+              </label>
+              <input
+                type="text"
+                name="qualification.institute"
+                placeholder="Institute Name"
+                value={formData.qualification.institute}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Year of Passing*
+              </label>
+              <input
+                type="text"
+                name="qualification.yearOfPassing"
+                placeholder="YYYY"
+                value={formData.qualification.yearOfPassing}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+                maxLength="4"
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/\D/g, "");
+                }}
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Designation*
+              </label>
+              <input
+                type="text"
+                name="qualification.designation"
+                placeholder="Designation/Role"
+                value={formData.qualification.designation}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Authorities/Permissions Section */}
+          <div className="text-white font-semibold bg-[#353a40] rounded-lg px-4 text-center shadow-sm mt-6">
+            Authorities & Permissions
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Object.entries(formData.authorities).map(
+                ([category, permissions]) => (
+                  <div key={category} className="border rounded-lg p-4">
+                    <h3 className="font-medium text-gray-700 mb-3 capitalize">
+                      {category.replace(/([A-Z])/g, " $1")}
+                    </h3>
+                    <div className="space-y-3">
+                      {Object.entries(permissions).map(([permission]) => (
+                        <div
+                          key={permission}
+                          className="flex items-center justify-between"
+                        >
+                          <label className="text-sm text-gray-600 capitalize">
+                            {permission}
+                          </label>
+                          <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={
+                                formData.authorities[category][permission]
+                              }
+                              onChange={(e) =>
+                                handleAuthorityChange(
+                                  category,
+                                  permission,
+                                  e.target.checked
+                                )
+                              }
+                              className="sr-only peer"
+                            />
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+
+          {/* Emergency Contact Form */}
+          <div className="text-white font-semibold bg-[#353a40] rounded-lg px-4 text-center shadow-sm mt-6">
+            Emergency Contact Form
+          </div>
+
+          <div className="grid mb-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">Name</label>
+              <input
+                type="text"
+                name="emergencyContact.name"
+                placeholder="-"
+                value={formData.emergencyContact.name}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Relationship
+              </label>
+              <input
+                type="text"
+                name="emergencyContact.relationship"
+                placeholder="-"
+                value={formData.emergencyContact.relationship}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Phone Number
+              </label>
+              <input
+                type="text"
+                name="emergencyContact.phoneNumber"
+                placeholder="-"
+                value={formData.emergencyContact.phoneNumber}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+                onKeyDown={(e) => {
+                  const allowedKeys = [
+                    "Backspace",
+                    "Delete",
+                    "ArrowLeft",
+                    "ArrowRight",
+                    "Tab",
+                  ];
+                  if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/\D/g, "");
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Related Documents */}
+          <div className="text-white font-semibold bg-[#353a40] rounded-lg px-4 text-center shadow-sm mt-6">
+            Related Documents
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                CNIC Document
+              </label>
+              <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
+                <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
+                  Choose file
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e, "cnicDocument")}
+                  />
+                </label>
+                <div className="flex-1 px-4 py-2.5 text-gray-400 overflow-hidden">
+                  <span>{fileStatus.cnicDocument}</span>
+                </div>
+              </div>
+              <p className="text-xs text-gray-500">Max Size:1MB.</p>
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Medical Records
+              </label>
+              <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
+                <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
+                  Choose file
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e, "medicalRecords")}
+                  />
+                </label>
+                <div className="flex-1 px-4 py-2.5 text-gray-400 overflow-hidden">
+                  <span>{fileStatus.medicalRecords}</span>
+                </div>
+              </div>
+              <p className="text-xs text-gray-500">Max Size:1MB.</p>
+            </div>
+
+            <div className="flex flex-col gap-y-2 md:col-span-2">
+              <label className="text-sm font-medium text-gray-500">
+                Additional Documents
+              </label>
+              <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
+                <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
+                  Choose file
+                  <input
+                    type="file"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => {
+                      const selectedFiles = Array.from(e.target.files || []);
+                      const fileName =
+                        selectedFiles.length > 0
+                          ? selectedFiles.length === 1
+                            ? selectedFiles[0].name
+                            : `${selectedFiles.length} files selected`
+                          : "No file chosen";
+
+                      setFileStatus((prev) => ({
+                        ...prev,
+                        additionalDocuments: fileName,
+                      }));
+
+                      setFiles((prev) => ({
+                        ...prev,
+                        additionalDocuments: e.target.files[0],
+                      }));
+                    }}
+                  />
+                </label>
+                <div className="flex-1 px-4 py-2.5 text-gray-400 overflow-hidden">
+                  <span>{fileStatus.additionalDocuments}</span>
+                </div>
+              </div>
+              <p className="text-xs text-gray-500">Max Size:1MB.</p>
+            </div>
+          </div>
+
+          {/* Save Button */}
+          <div className="text-center">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="bg-[#067954] text-white font-semibold cursor-pointer my-4 w-full px-6 py-2.5 rounded-xl transition-all duration-300 hover:bg-[#353a40] flex items-center justify-center gap-3 shadow-md hover:shadow-lg active:scale-[98%] disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? (
+                <span className="tracking-wide">Processing...</span>
+              ) : (
+                <span className="tracking-wide">Save</span>
+              )}
+            </button>
+          </div>
+        </form>
       </div>
-    </div>
+    </>
   );
 };
 

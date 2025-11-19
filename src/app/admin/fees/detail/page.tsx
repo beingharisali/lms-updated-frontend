@@ -25,15 +25,11 @@ const FeeDetail = () => {
 
   if (!formData) {
     return (
-      <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
-        <Adminsidebar />
-        <div className="flex-1 flex flex-col overflow-x-auto p-8">
-          <Header  />
-          <p className="mt-10 text-center text-gray-500 text-lg font-medium">
-            No student selected.
-          </p>
-        </div>
-      </div>
+      <>
+        <p className="mt-10 text-center text-gray-500 text-lg font-medium">
+          No student selected.
+        </p>
+      </>
     );
   }
 
@@ -42,12 +38,13 @@ const FeeDetail = () => {
       <Adminsidebar />
 
       <div className="flex-1 flex flex-col overflow-x-auto">
-        <Header   />
+        <Header />
 
         <main className="p-6 md:p-10 mt-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
             <h1 className="text-2xl font-semibold text-gray-800">
-              Fee Detail — <span className="text-blue-600">{formData.name}</span>
+              Fee Detail —{" "}
+              <span className="text-blue-600">{formData.name}</span>
             </h1>
 
             <button
@@ -76,7 +73,11 @@ const FeeDetail = () => {
                 { label: "Student Name", name: "name", type: "text" },
                 { label: "Total Fees", name: "totalFees", type: "number" },
                 { label: "Fee Paid", name: "feePaid", type: "number" },
-                { label: "Fee Remaining", name: "feeRemaining", type: "number" },
+                {
+                  label: "Fee Remaining",
+                  name: "feeRemaining",
+                  type: "number",
+                },
                 { label: "Due Date", name: "dueDate", type: "text" },
                 { label: "Contact No.", name: "contact", type: "text" },
                 { label: "Course", name: "course", type: "text" },

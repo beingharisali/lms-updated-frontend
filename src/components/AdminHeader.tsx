@@ -5,7 +5,7 @@ import { BsBell } from "react-icons/bs";
 
 interface AdminHeaderProps {
   breadcrumb: string;
-  title: string;
+  title?: string;
   showBranch?: boolean;
   showNotifications?: boolean;
   showProfile?: boolean;
