@@ -9,7 +9,7 @@ export default function Dashboard() {
       <Adminsidebar />
 
       {/* <div className="flex flex-col flex-1 bg-[#eff6f9]"> */}
-        {/* Sticky Header - unchanged */}
+        {/* Sticky Header - unchanged * /}
         <div className="bg-transparent shadow py-2 mx-2 rounded-2xl sticky md:top-3 top-20 z-40 backdrop-blur-sm flex items-center justify-between">
           <div>
             <h2 className="ml-4 text-sm sm:text-base md:text-base">
