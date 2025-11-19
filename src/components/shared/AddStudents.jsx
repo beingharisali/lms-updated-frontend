@@ -33,10 +33,8 @@ const AddStudents = () => {
     },
     courses: {
       selectedCourse: "",
-      batch: "",
       csr: "",
       totalFees: 0,
-      downPayment: 0,
       numberOfInstallments: 1,
       feePerInstallment: 0,
       amountPaid: 0,
@@ -164,7 +162,6 @@ const AddStudents = () => {
 
     try {
       const submitData = new FormData();
-      console.log("testing");
 
       submitData.append("studentId", studentId);
       submitData.append("fullName", formData.fullName);
@@ -187,14 +184,9 @@ const AddStudents = () => {
         "courses[selectedCourse]",
         formData.courses.selectedCourse
       );
-      submitData.append("courses[batch]", formData.courses.batch.toString());
       submitData.append(
         "courses[totalFees]",
         formData.courses.totalFees.toString()
-      );
-      submitData.append(
-        "courses[downPayment]",
-        formData.courses.downPayment.toString()
       );
       submitData.append(
         "courses[numberOfInstallments]",
@@ -249,10 +241,8 @@ const AddStudents = () => {
         parentGuardian: { name: "", phone: "" },
         courses: {
           selectedCourse: "",
-          batch: "",
           csr: "",
           totalFees: 0,
-          downPayment: 0,
           numberOfInstallments: 1,
           feePerInstallment: 0,
           amountPaid: 0,
@@ -293,664 +283,623 @@ const AddStudents = () => {
 
   return (
     <>
-      {/* <Adminsidebar /> */}
+      <div className="flex-1 md:mt-8 mt-24 overflow-y-auto px-6">
+        {message.text && (
+          <div
+            className={`mb-4 p-3 rounded-md ${
+              message.type === "success"
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800"
+            }`}
+          >
+            {message.text}
+          </div>
+        )}
 
-      <>
-        {/* <AdminHeader
-          breadcrumb="Super Admin / Add Student"
-          title="Add Student"
-        /> */}
-        <div className="flex-1 md:mt-8 mt-24 overflow-y-auto px-6">
-          {message.text && (
-            <div
-              className={`mb-4 p-3 rounded-md ${
-                message.type === "success"
-                  ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800"
-              }`}
-            >
-              {message.text}
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div className="text-center space-y-4">
+            <div className="w-24 h-24 mx-auto rounded-full bg-gray-200 flex items-center justify-center shadow-sm">
+              <span className="text-gray-400 text-3xl">?</span>
             </div>
-          )}
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <div className="text-center space-y-4">
-              <div className="w-24 h-24 mx-auto rounded-full bg-gray-200 flex items-center justify-center shadow-sm">
-                <span className="text-gray-400 text-3xl">?</span>
+            <label className="block font-medium text-gray-700">
+              Upload Student Photo
+            </label>
+
+            <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm w-full mx-auto">
+              <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
+                Choose file
+                <input
+                  type="file"
+                  className="hidden"
+                  onChange={(e) => handleFileChange(e, "photo")}
+                  accept="image/*"
+                />
+              </label>
+              <div className="px-4 py-2.5 text-gray-400 overflow-hidden">
+                <span>{fileStatus.photo}</span>
               </div>
+            </div>
 
-              <label className="block font-medium text-gray-700">
-                Upload Student Photo
+            <p className="text-xs text-gray-500">
+              SVG, PNG, JPG or GIF (MAX. 800x400px) & Max Size:1MB.
+            </p>
+          </div>
+
+          <div className="grid mb-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Student ID*
+              </label>
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  name="studentId"
+                  value={studentId}
+                  readOnly
+                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={generateID}
+                  className="ml-2 p-2 bg-gray-200 hover:bg-gray-300 rounded-md shadow-sm transition-colors duration-150"
+                >
+                  <RotateCcw className="w-4 h-4 text-gray-600" />
+                </button>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Full Name
+              </label>
+              <input
+                type="text"
+                name="fullName"
+                placeholder="Enter your full name"
+                value={formData.fullName}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Parent/Guardian Name
+              </label>
+              <input
+                type="text"
+                name="parentGuardian.name"
+                placeholder="Parent/Guardian Name"
+                value={formData.parentGuardian.name}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Date of Birth
+              </label>
+              <input
+                type="date"
+                name="dateOfBirth"
+                value={formData.dateOfBirth}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none cursor-pointer"
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Gender*
+              </label>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none text-gray-700"
+              >
+                <option value="" className="text-gray-400">
+                  Select Gender
+                </option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Phone*
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+                onKeyDown={(e) => {
+                  const allowedKeys = [
+                    "Backspace",
+                    "Delete",
+                    "ArrowLeft",
+                    "ArrowRight",
+                    "Tab",
+                  ];
+                  if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/\D/g, "");
+                }}
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Email*
+              </label>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Password*
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Password (min 6 characters)"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                  minLength={6}
+                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              <p className="text-xs text-gray-500">Minimum 6 characters</p>
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                CNIC/BForm (without dashes)*
+              </label>
+              <input
+                type="text"
+                name="cnicBForm"
+                placeholder="3520160941677"
+                value={formData.cnicBForm}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+                maxLength="13"
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/\D/g, "");
+                }}
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Parent/Guardian Phone
+              </label>
+              <input
+                type="tel"
+                name="parentGuardian.phone"
+                placeholder="Phone"
+                value={formData.parentGuardian.phone}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+                onKeyDown={(e) => {
+                  const allowedKeys = [
+                    "Backspace",
+                    "Delete",
+                    "ArrowLeft",
+                    "ArrowRight",
+                    "Tab",
+                  ];
+                  if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/\D/g, "");
+                }}
+              />
+            </div>
+
+            <div className="md:col-span-2 lg:col-span-3 flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Address
+              </label>
+              <textarea
+                name="address"
+                placeholder="Address"
+                value={formData.address}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none min-h-[100px]"
+              ></textarea>
+            </div>
+          </div>
+
+          <div className="text-white font-semibold bg-[#353a40] rounded-lg px-4 text-center shadow-sm">
+            Course
+          </div>
+
+          <div className="grid mb-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Select Course*
               </label>
 
-              <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm w-full mx-auto">
+              {loading ? (
+                <div>Loading courses...</div>
+              ) : error ? (
+                <div className="text-red-500 text-sm">Error: {error}</div>
+              ) : (
+                <select
+                  name="courses.selectedCourse"
+                  value={formData.courses.selectedCourse}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                    const selectedCourse = courses.find(
+                      (c) => c.name === e.target.value
+                    );
+                    if (selectedCourse) {
+                      setFormData((prev) => ({
+                        ...prev,
+                        courses: {
+                          ...prev.courses,
+                          totalFees: selectedCourse.totalFees,
+                        },
+                      }));
+                    }
+                  }}
+                  required
+                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+                >
+                  <option value="">Select Course</option>
+                  {courses.map((course) => (
+                    <option key={course._id} value={course.name}>
+                      {course.name}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Total Fees*
+              </label>
+              <input
+                type="number"
+                name="courses.totalFees"
+                value={formData.courses.totalFees}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                No of Installment*
+              </label>
+              <input
+                type="number"
+                name="courses.numberOfInstallments"
+                value={formData.courses.numberOfInstallments}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Fee per Installment
+              </label>
+              <input
+                type="number"
+                name="courses.feePerInstallment"
+                placeholder="Fee per installment"
+                value={formData.courses.feePerInstallment}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Amount Paid
+              </label>
+              <input
+                type="number"
+                name="courses.amountPaid"
+                placeholder="Amount paid"
+                value={formData.courses.amountPaid}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Enrolled Date
+              </label>
+              <input
+                type="date"
+                name="courses.enrolledDate"
+                value={formData.courses.enrolledDate}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none cursor-pointer"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-500">CSR</label>
+              <input
+                type="text"
+                name="courses.csr"
+                value={formData.courses.csr}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none cursor-pointer"
+              ></input>
+            </div>
+
+            <div className="flex-3">
+              <label className="text-sm font-medium text-gray-500">
+                Payment Method
+              </label>
+              <select
+                name="courses.SubmitFee"
+                placeholder="Select Type"
+                value={formData.courses.SubmitFee}
+                onChange={handleInputChange}
+                required
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              >
+                <option value="">Select Payment Method</option>
+                <option value="Cash">Cash</option>
+                <option value="Jazz Cash">Jazz Cash</option>
+                <option value="Custom">Add Custom Payment Method</option>
+              </select>
+            </div>
+
+            {/* ✅ Input appears side-by-side when "Custom" is selected */}
+            {formData.courses.SubmitFee === "Custom" && (
+              <div className="flex-2">
+                <label className="text-sm font-medium text-gray-500">
+                  Custom Method
+                </label>
+                <input
+                  type="text"
+                  name="courses.customPaymentMethod"
+                  value={formData.courses.customPaymentMethod || ""}
+                  onChange={handleInputChange}
+                  placeholder="e.g., Bank Transfer"
+                  className="w-full border border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+                  required
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="rounded-lg bg-gray-50 p-4 shadow-sm mt-6">
+            <h3 className="font-semibold text-gray-700 mb-2">Fee Guidelines</h3>
+            <ul className="list-disc pl-6 text-sm text-gray-600 space-y-1">
+              <li>The fee installment is the key factor</li>
+              <li>
+                Installments are calculated as (total fees - down payment)
+              </li>
+              <li>
+                The due date for each installment is from one month from the
+                previous installment
+              </li>
+            </ul>
+          </div>
+
+          <div className="text-white font-semibold bg-[#353a40] rounded-lg px-4 text-center shadow-sm mt-6">
+            Emergency Contact Form
+          </div>
+          <div className="grid mb-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">Name</label>
+              <input
+                type="text"
+                name="emergencyContact.name"
+                placeholder=""
+                value={formData.emergencyContact.name}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Relationship
+              </label>
+              <input
+                type="text"
+                name="emergencyContact.relationship"
+                placeholder="-"
+                value={formData.emergencyContact.relationship}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Phone Number
+              </label>
+              <input
+                type="text"
+                name="emergencyContact.phoneNumber"
+                placeholder="-"
+                value={formData.emergencyContact.phoneNumber}
+                onChange={handleInputChange}
+                className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+                onKeyDown={(e) => {
+                  const allowedKeys = [
+                    "Backspace",
+                    "Delete",
+                    "ArrowLeft",
+                    "ArrowRight",
+                    "Tab",
+                  ];
+                  if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/\D/g, "");
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="text-white font-semibold bg-[#353a40] rounded-lg px-4 text-center shadow-sm mt-6">
+            Related Documents
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Student CNIC/B-Form
+              </label>
+              <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
                 <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
                   Choose file
                   <input
                     type="file"
                     className="hidden"
-                    onChange={(e) => handleFileChange(e, "photo")}
-                    accept="image/*"
+                    onChange={(e) => handleFileChange(e, "studentCnicBForm")}
                   />
                 </label>
-                <div className="px-4 py-2.5 text-gray-400 overflow-hidden">
-                  <span>{fileStatus.photo}</span>
+                <div className="flex-1 px-4 py-2.5 text-gray-400 overflow-hidden">
+                  <span>{fileStatus.studentCnicBForm}</span>
                 </div>
               </div>
-
-              <p className="text-xs text-gray-500">
-                SVG, PNG, JPG or GIF (MAX. 800x400px) & Max Size:1MB.
-              </p>
+              <p className="text-xs text-gray-500">Max Size:1MB.</p>
             </div>
 
-            <div className="grid mb-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Student ID*
-                </label>
-                <div className="flex items-center">
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Parent CNIC
+              </label>
+              <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
+                <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
+                  Choose file
                   <input
-                    type="text"
-                    name="studentId"
-                    value={studentId}
-                    readOnly
-                    className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e, "parentCnic")}
                   />
-                  <button
-                    type="button"
-                    onClick={generateID}
-                    className="ml-2 p-2 bg-gray-200 hover:bg-gray-300 rounded-md shadow-sm transition-colors duration-150"
-                  >
-                    <RotateCcw className="w-4 h-4 text-gray-600" />
-                  </button>
+                </label>
+                <div className="flex-1 px-4 py-2.5 text-gray-400 overflow-hidden">
+                  <span>{fileStatus.parentCnic}</span>
                 </div>
               </div>
+              <p className="text-xs text-gray-500">Max Size:1MB.</p>
+            </div>
 
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  name="fullName"
-                  placeholder="Enter your full name"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Parent/Guardian Name
-                </label>
-                <input
-                  type="text"
-                  name="parentGuardian.name"
-                  placeholder="Parent/Guardian Name"
-                  value={formData.parentGuardian.name}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Date of Birth
-                </label>
-                <input
-                  type="date"
-                  name="dateOfBirth"
-                  value={formData.dateOfBirth}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none cursor-pointer"
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Gender*
-                </label>
-                <select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none text-gray-700"
-                >
-                  <option value="" className="text-gray-400">
-                    Select Gender
-                  </option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Phone*
-                </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  placeholder="Phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                  onKeyDown={(e) => {
-                    const allowedKeys = [
-                      "Backspace",
-                      "Delete",
-                      "ArrowLeft",
-                      "ArrowRight",
-                      "Tab",
-                    ];
-                    if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
-                      e.preventDefault();
-                    }
-                  }}
-                  onInput={(e) => {
-                    e.target.value = e.target.value.replace(/\D/g, "");
-                  }}
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Email*
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Password*
-                </label>
-                <div className="relative">
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Medical Records
+              </label>
+              <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
+                <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
+                  Choose file
                   <input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    placeholder="Password (min 6 characters)"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    required
-                    minLength={6}
-                    className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none pr-10"
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e, "medicalRecords")}
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
+                </label>
+                <div className="flex-1 px-4 py-2.5 text-gray-400 overflow-hidden">
+                  <span>{fileStatus.medicalRecords}</span>
                 </div>
-                <p className="text-xs text-gray-500">Minimum 6 characters</p>
               </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  CNIC/BForm (without dashes)*
-                </label>
-                <input
-                  type="text"
-                  name="cnicBForm"
-                  placeholder="3520160941677"
-                  value={formData.cnicBForm}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                  maxLength="13"
-                  onInput={(e) => {
-                    e.target.value = e.target.value.replace(/\D/g, "");
-                  }}
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Parent/Guardian Phone
-                </label>
-                <input
-                  type="tel"
-                  name="parentGuardian.phone"
-                  placeholder="Phone"
-                  value={formData.parentGuardian.phone}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                  onKeyDown={(e) => {
-                    const allowedKeys = [
-                      "Backspace",
-                      "Delete",
-                      "ArrowLeft",
-                      "ArrowRight",
-                      "Tab",
-                    ];
-                    if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
-                      e.preventDefault();
-                    }
-                  }}
-                  onInput={(e) => {
-                    e.target.value = e.target.value.replace(/\D/g, "");
-                  }}
-                />
-              </div>
-
-              <div className="md:col-span-2 lg:col-span-3 flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Address
-                </label>
-                <textarea
-                  name="address"
-                  placeholder="Address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none min-h-[100px]"
-                ></textarea>
-              </div>
+              <p className="text-xs text-gray-500">Max Size:1MB.</p>
             </div>
 
-            <div className="text-white font-semibold bg-[#353a40] rounded-lg px-4 text-center shadow-sm">
-              Course
-            </div>
-
-            <div className="grid mb-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Select Course*
-                </label>
-
-                {loading ? (
-                  <div>Loading courses...</div>
-                ) : error ? (
-                  <div className="text-red-500 text-sm">Error: {error}</div>
-                ) : (
-                  <select
-                    name="courses.selectedCourse"
-                    value={formData.courses.selectedCourse}
+            <div className="flex flex-col gap-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Additional Documents
+              </label>
+              <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
+                <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
+                  Choose file
+                  <input
+                    type="file"
+                    multiple
+                    className="hidden"
                     onChange={(e) => {
-                      handleInputChange(e);
-                      const selectedCourse = courses.find(
-                        (c) => c.name === e.target.value
-                      );
-                      if (selectedCourse) {
-                        setFormData((prev) => ({
-                          ...prev,
-                          courses: {
-                            ...prev.courses,
-                            totalFees: selectedCourse.totalFees,
-                          },
-                        }));
-                      }
+                      const selectedFiles = Array.from(e.target.files || []);
+                      const fileName =
+                        selectedFiles.length > 0
+                          ? selectedFiles.length === 1
+                            ? selectedFiles[0].name
+                            : `${selectedFiles.length} files selected`
+                          : "No file chosen";
+
+                      setFileStatus((prev) => ({
+                        ...prev,
+                        additionalDocuments: fileName,
+                      }));
+
+                      setFiles((prev) => ({
+                        ...prev,
+                        additionalDocuments: e.target.files[0],
+                      }));
                     }}
-                    required
-                    className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                  >
-                    <option value="">Select Course</option>
-                    {courses.map((course) => (
-                      <option key={course._id} value={course.name}>
-                        {course.name}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Batch
-                </label>
-                <input
-                  placeholder="58"
-                  type="number"
-                  name="courses.batch"
-                  value={formData.courses.batch}
-                  onChange={handleInputChange}
-                  required
-                  min="1"
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                ></input>
-              </div>
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Total Fees*
-                </label>
-                <input
-                  type="number"
-                  name="courses.totalFees"
-                  value={formData.courses.totalFees}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Down Payment*
-                </label>
-                <input
-                  type="number"
-                  name="courses.downPayment"
-                  value={formData.courses.downPayment}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  No of Installment*
-                </label>
-                <input
-                  type="number"
-                  name="courses.numberOfInstallments"
-                  value={formData.courses.numberOfInstallments}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Fee per Installment
-                </label>
-                <input
-                  type="number"
-                  name="courses.feePerInstallment"
-                  placeholder="Fee per installment"
-                  value={formData.courses.feePerInstallment}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Amount Paid
-                </label>
-                <input
-                  type="number"
-                  name="courses.amountPaid"
-                  placeholder="Amount paid"
-                  value={formData.courses.amountPaid}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Enrolled Date
-                </label>
-                <input
-                  type="date"
-                  name="courses.enrolledDate"
-                  value={formData.courses.enrolledDate}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none cursor-pointer"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-500">CSR</label>
-                <input
-                  type="text"
-                  name="courses.csr"
-                  value={formData.courses.csr}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none cursor-pointer"
-                ></input>
-              </div>
-
-              <div className="flex-3">
-                <label className="text-sm font-medium text-gray-500">
-                  Payment Method
-                </label>
-                <select
-                  name="courses.SubmitFee"
-                  placeholder="Select Type"
-                  value={formData.courses.SubmitFee}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                >
-                  <option value="">Select Payment Method</option>
-                  <option value="Cash">Cash</option>
-                  <option value="Jazz Cash">Jazz Cash</option>
-                  <option value="Custom">Add Custom Payment Method</option>
-                </select>
-              </div>
-
-              {/* ✅ Input appears side-by-side when "Custom" is selected */}
-              {formData.courses.SubmitFee === "Custom" && (
-                <div className="flex-2">
-                  <label className="text-sm font-medium text-gray-500">
-                    Custom Method
-                  </label>
-                  <input
-                    type="text"
-                    name="courses.customPaymentMethod"
-                    value={formData.courses.customPaymentMethod || ""}
-                    onChange={handleInputChange}
-                    placeholder="e.g., Bank Transfer"
-                    className="w-full border border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                    required
                   />
+                </label>
+                <div className="flex-1 px-4 py-2.5 text-gray-400 overflow-hidden">
+                  <span>{fileStatus.additionalDocuments}</span>
                 </div>
+              </div>
+              <p className="text-xs text-gray-500">Max Size:1MB.</p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="bg-[#067954] text-white font-semibold cursor-pointer my-4 w-full px-6 py-2.5 rounded-xl transition-all duration-300 hover:bg-[#353a40] flex items-center justify-center gap-3 shadow-md hover:shadow-lg active:scale-[98%] disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? (
+                <span className="tracking-wide">Processing...</span>
+              ) : (
+                <span className="tracking-wide">Save</span>
               )}
-            </div>
-
-            <div className="rounded-lg bg-gray-50 p-4 shadow-sm mt-6">
-              <h3 className="font-semibold text-gray-700 mb-2">
-                Fee Guidelines
-              </h3>
-              <ul className="list-disc pl-6 text-sm text-gray-600 space-y-1">
-                <li>The fee installment is the key factor</li>
-                <li>
-                  Installments are calculated as (total fees - down payment)
-                </li>
-                <li>
-                  The due date for each installment is from one month from the
-                  previous installment
-                </li>
-              </ul>
-            </div>
-
-            <div className="text-white font-semibold bg-[#353a40] rounded-lg px-4 text-center shadow-sm mt-6">
-              Emergency Contact Form
-            </div>
-            <div className="grid mb-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  name="emergencyContact.name"
-                  placeholder=""
-                  value={formData.emergencyContact.name}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Relationship
-                </label>
-                <input
-                  type="text"
-                  name="emergencyContact.relationship"
-                  placeholder="-"
-                  value={formData.emergencyContact.relationship}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Phone Number
-                </label>
-                <input
-                  type="text"
-                  name="emergencyContact.phoneNumber"
-                  placeholder="-"
-                  value={formData.emergencyContact.phoneNumber}
-                  onChange={handleInputChange}
-                  className="w-full border bg-white border-gray-300 rounded-md px-3.5 py-2 shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-150 outline-none"
-                  onKeyDown={(e) => {
-                    const allowedKeys = [
-                      "Backspace",
-                      "Delete",
-                      "ArrowLeft",
-                      "ArrowRight",
-                      "Tab",
-                    ];
-                    if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
-                      e.preventDefault();
-                    }
-                  }}
-                  onInput={(e) => {
-                    e.target.value = e.target.value.replace(/\D/g, "");
-                  }}
-                />
-              </div>
-            </div>
-
-            <div className="text-white font-semibold bg-[#353a40] rounded-lg px-4 text-center shadow-sm mt-6">
-              Related Documents
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Student CNIC/B-Form
-                </label>
-                <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
-                  <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
-                    Choose file
-                    <input
-                      type="file"
-                      className="hidden"
-                      onChange={(e) => handleFileChange(e, "studentCnicBForm")}
-                    />
-                  </label>
-                  <div className="flex-1 px-4 py-2.5 text-gray-400 overflow-hidden">
-                    <span>{fileStatus.studentCnicBForm}</span>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500">Max Size:1MB.</p>
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Parent CNIC
-                </label>
-                <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
-                  <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
-                    Choose file
-                    <input
-                      type="file"
-                      className="hidden"
-                      onChange={(e) => handleFileChange(e, "parentCnic")}
-                    />
-                  </label>
-                  <div className="flex-1 px-4 py-2.5 text-gray-400 overflow-hidden">
-                    <span>{fileStatus.parentCnic}</span>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500">Max Size:1MB.</p>
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Medical Records
-                </label>
-                <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
-                  <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
-                    Choose file
-                    <input
-                      type="file"
-                      className="hidden"
-                      onChange={(e) => handleFileChange(e, "medicalRecords")}
-                    />
-                  </label>
-                  <div className="flex-1 px-4 py-2.5 text-gray-400 overflow-hidden">
-                    <span>{fileStatus.medicalRecords}</span>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500">Max Size:1MB.</p>
-              </div>
-
-              <div className="flex flex-col gap-y-2">
-                <label className="text-sm font-medium text-gray-500">
-                  Additional Documents
-                </label>
-                <div className="flex border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
-                  <label className="px-4 py-2.5 text-white bg-[#202938] hover:bg-[#353a40] hover:text-white cursor-pointer transition-colors duration-200 border-r border-gray-300">
-                    Choose file
-                    <input
-                      type="file"
-                      multiple
-                      className="hidden"
-                      onChange={(e) => {
-                        const selectedFiles = Array.from(e.target.files || []);
-                        const fileName =
-                          selectedFiles.length > 0
-                            ? selectedFiles.length === 1
-                              ? selectedFiles[0].name
-                              : `${selectedFiles.length} files selected`
-                            : "No file chosen";
-
-                        setFileStatus((prev) => ({
-                          ...prev,
-                          additionalDocuments: fileName,
-                        }));
-
-                        setFiles((prev) => ({
-                          ...prev,
-                          additionalDocuments: e.target.files[0],
-                        }));
-                      }}
-                    />
-                  </label>
-                  <div className="flex-1 px-4 py-2.5 text-gray-400 overflow-hidden">
-                    <span>{fileStatus.additionalDocuments}</span>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500">Max Size:1MB.</p>
-              </div>
-            </div>
-
-            <div className="text-center">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-[#067954] text-white font-semibold cursor-pointer my-4 w-full px-6 py-2.5 rounded-xl transition-all duration-300 hover:bg-[#353a40] flex items-center justify-center gap-3 shadow-md hover:shadow-lg active:scale-[98%] disabled:opacity-70 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? (
-                  <span className="tracking-wide">Processing...</span>
-                ) : (
-                  <span className="tracking-wide">Save</span>
-                )}
-              </button>
-            </div>
-          </form>
-        </div>
-      </>
+            </button>
+          </div>
+        </form>
+      </div>
     </>
   );
 };

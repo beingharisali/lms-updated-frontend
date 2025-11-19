@@ -293,18 +293,8 @@ const AddTeachers = () => {
       if (files.additionalDocuments)
         submitData.append("additionalDocuments", files.additionalDocuments);
 
-      // Debug: Log all FormData entries
-      console.log("📤 FormData contents:");
-      for (let [key, value] of submitData.entries()) {
-        console.log(`📝 ${key}:`, value);
-      }
-
-      console.log("🚀 Sending request to backend...");
-
       // Make API request
       const response = await http.post("/teachers", submitData);
-
-      console.log("✅ Teacher created successfully:", response.data);
 
       setMessage({
         text: "Teacher created successfully!",

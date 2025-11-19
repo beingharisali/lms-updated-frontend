@@ -41,11 +41,8 @@ const AuthForm: React.FC<AuthFormProps> = ({
 
       // Map instructor to teacher for backend compatibility
       const backendRole = role === "instructor" ? "teacher" : role;
-      console.log(`AuthForm - Attempting login as: ${backendRole}`);
 
       await auth.loginUser(email, password, backendRole as any);
-
-      console.log("AuthForm - Login successful, waiting for redirect...");
     } catch (error: any) {
       console.error("AuthForm - Login error:", error);
 

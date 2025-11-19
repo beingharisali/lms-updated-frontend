@@ -19,7 +19,6 @@ const FeeDetail = () => {
   };
 
   const handleSave = () => {
-    console.log("Updated Data:", formData);
     setIsEditing(false);
   };
 

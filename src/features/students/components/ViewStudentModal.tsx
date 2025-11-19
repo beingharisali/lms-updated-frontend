@@ -23,7 +23,6 @@ interface ParentGuardian {
 interface CourseInfo {
   selectedCourse?: string;
   totalFees?: number | string;
-  downPayment?: number | string;
   numberOfInstallments?: number | string;
   feePerInstallment?: number | string;
   amountPaid?: number | string;
@@ -135,7 +134,13 @@ export function ViewStudentModal({ student, onClose }: ViewStudentModalProps) {
     );
   };
 
-  const InfoField = ({ label, value }: { label: string; value?: string | number }) => (
+  const InfoField = ({
+    label,
+    value,
+  }: {
+    label: string;
+    value?: string | number;
+  }) => (
     <div>
       <p className="text-gray-600 font-medium text-sm">{label}:</p>
       <p className="text-gray-800 break-words text-sm">{value || "-"}</p>
@@ -146,7 +151,9 @@ export function ViewStudentModal({ student, onClose }: ViewStudentModalProps) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-800">Student Details</h2>
+          <h2 className="text-xl font-semibold text-gray-800">
+            Student Details
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -189,7 +196,10 @@ export function ViewStudentModal({ student, onClose }: ViewStudentModalProps) {
               <InfoField label="Name" value={student.parentGuardian?.name} />
               <InfoField label="Phone" value={student.parentGuardian?.phone} />
               <InfoField label="Email" value={student.parentGuardian?.email} />
-              <InfoField label="CNIC Number" value={student.parentGuardian?.cnic} />
+              <InfoField
+                label="CNIC Number"
+                value={student.parentGuardian?.cnic}
+              />
             </div>
 
             {/* Course */}
@@ -197,9 +207,14 @@ export function ViewStudentModal({ student, onClose }: ViewStudentModalProps) {
               <h4 className="font-semibold text-gray-700 border-b pb-2">
                 Course Information
               </h4>
-              <InfoField label="Course" value={student.courses?.selectedCourse} />
-              <InfoField label="Total Fees" value={student.courses?.totalFees} />
-              <InfoField label="Down Payment" value={student.courses?.downPayment} />
+              <InfoField
+                label="Course"
+                value={student.courses?.selectedCourse}
+              />
+              <InfoField
+                label="Total Fees"
+                value={student.courses?.totalFees}
+              />
               <InfoField
                 label="Installments"
                 value={student.courses?.numberOfInstallments}
@@ -208,7 +223,10 @@ export function ViewStudentModal({ student, onClose }: ViewStudentModalProps) {
                 label="Fee Per Installment"
                 value={student.courses?.feePerInstallment}
               />
-              <InfoField label="Amount Paid" value={student.courses?.amountPaid} />
+              <InfoField
+                label="Amount Paid"
+                value={student.courses?.amountPaid}
+              />
               <InfoField
                 label="Enrolled Date"
                 value={student.courses?.enrolledDate}
@@ -234,7 +252,9 @@ export function ViewStudentModal({ student, onClose }: ViewStudentModalProps) {
 
           {/* Documents */}
           <div className="border-t pt-6">
-            <h4 className="text-lg font-semibold text-gray-800 mb-4">Documents</h4>
+            <h4 className="text-lg font-semibold text-gray-800 mb-4">
+              Documents
+            </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {renderFile(student.studentCnicBForm, "Student CNIC/B-Form")}
               {renderFile(student.parentCnic, "Parent CNIC")}

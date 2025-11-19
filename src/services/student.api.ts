@@ -4,7 +4,6 @@ import { Student } from "../types/student";
 // ========== CRUD APIs for Students ==========
 export async function getStudents(): Promise<Student[]> {
   const res = await http.get("/students");
-  console.log("ressss", res.data.students);
   return res.data.students;
 }
 
@@ -18,51 +17,19 @@ export async function createStudent(data: Partial<Student>): Promise<Student> {
   return res.data;
 }
 
-// export async function updateStudent(
-//   id: string,
-//   data: Partial<Student>
-// ): Promise<Student> {
-//   try {
-//     console.log("Updating student with ID:", id);
-//     console.log("Data being sent:", data);
-
-//     // Try PATCH first
-//     try {
-//       const res = await http.patch(`/students/${id}`, data);
-//       console.log("PATCH response:", res.data);
-//       return res.data;
-//     } catch (patchError) {
-//       console.warn("PATCH failed, trying PUT...", patchError);
-
-//       // Fallback to PUT if PATCH not supported
-//       const res = await http.put(`/students/${id}`, data);
-//       console.log("PUT response:", res.data);
-//       return res.data;
-//     }
-//   } catch (error) {
-//     console.error("Error updating student:", error);
-//     throw error;
-//   }
-// }
-
 export async function updateStudent(
   id: string,
   data: Partial<Student>
 ): Promise<Student> {
   try {
-    console.log("Updating student with ID:", id);
-    console.log("Data being sent:", data);
-
     // Use PUT directly (backend doesn't support PATCH)
     const res = await http.put(`/students/${id}`, data);
-    console.log("PUT response:", res.data);
     return res.data;
   } catch (error) {
     console.error("Error updating student:", error);
     throw error;
   }
 }
-
 
 export async function deleteStudent(id: string): Promise<void> {
   await http.delete(`/students/${id}`);
@@ -72,10 +39,10 @@ export async function deleteStudent(id: string): Promise<void> {
 export async function updateStudentWithFallback(
   id: string,
   data: Partial<Student>,
-  method: 'patch' | 'put' = 'patch'
+  method: "patch" | "put" = "patch"
 ): Promise<Student> {
   try {
-    if (method === 'patch') {
+    if (method === "patch") {
       const res = await http.patch(`/students/${id}`, data);
       return res.data;
     } else {
@@ -84,13 +51,12 @@ export async function updateStudentWithFallback(
     }
   } catch (error) {
     console.error(`Error with ${method.toUpperCase()} method:`, error);
-    
+
     // Fallback to the other method
-    const fallbackMethod = method === 'patch' ? 'put' : 'patch';
-    console.log(`Trying fallback method: ${fallbackMethod.toUpperCase()}`);
-    
+    const fallbackMethod = method === "patch" ? "put" : "patch";
+
     try {
-      if (fallbackMethod === 'patch') {
+      if (fallbackMethod === "patch") {
         const res = await http.patch(`/students/${id}`, data);
         return res.data;
       } else {

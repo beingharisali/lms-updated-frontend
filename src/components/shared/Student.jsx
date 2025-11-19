@@ -113,8 +113,6 @@ export default function StudentPage() {
         localStorage.getItem("authToken") ||
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGFkZTk2MjRjMTMxNTM5NDFlMmZlOGMiLCJuYW1lIjoiVGFsYWwiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NTYyMjc5NjIsImV4cCI6MTc1ODgxOTk2Mn0.OyCG7cd4lYkf1xMReRDojhaOD1nFRI9ricMThDhLjLY";
 
-      console.log("Sending data:", editFormData);
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/students/${selectedStudent._id}`,
         {
@@ -431,10 +429,6 @@ export default function StudentPage() {
                       value={selectedStudent.courses?.totalFees}
                     />
                     <InfoField
-                      label="Down Payment"
-                      value={selectedStudent.courses?.downPayment}
-                    />
-                    <InfoField
                       label="Number of Installments"
                       value={selectedStudent.courses?.numberOfInstallments}
                     />
@@ -677,18 +671,7 @@ export default function StudentPage() {
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Down Payment
-                      </label>
-                      <input
-                        type="number"
-                        name="courses.downPayment"
-                        value={editFormData.courses?.downPayment || ""}
-                        onChange={handleInputChange}
-                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    </div>
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Number of Installments

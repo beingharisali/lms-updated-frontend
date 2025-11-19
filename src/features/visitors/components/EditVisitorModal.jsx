@@ -24,9 +24,7 @@ export function EditVisitorModal({ visitor, onClose }) {
     setError("");
 
     try {
-      console.log("Submitting form data:", formData);
       const response = await updateVisitor(visitor._id, formData);
-      console.log("Update successful:", response);
       onClose();
     } catch (err) {
       console.error("Failed to update visitor:", err);

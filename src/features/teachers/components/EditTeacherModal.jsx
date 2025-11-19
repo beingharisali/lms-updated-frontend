@@ -57,9 +57,7 @@ export function EditTeacherModal({ teacher, onClose }) {
     setError("");
 
     try {
-      console.log("Submitting form data:", formData);
       const response = await updateTeacher(teacher._id, formData);
-      console.log("Update successful:", response);
       onClose();
     } catch (err) {
       console.error("Failed to update teacher:", err);

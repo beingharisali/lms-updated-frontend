@@ -29,7 +29,6 @@ type ExtendedStudent = Student & {
   courses?: {
     selectedCourse?: string;
     totalFees?: number | string;
-    downPayment?: number | string;
     numberOfInstallments?: number | string;
     feePerInstallment?: number | string;
     amountPaid?: number | string;
@@ -184,13 +183,6 @@ export default function StudentPage() {
       section: "Course Information",
     },
     {
-      name: "courses.downPayment",
-      label: "Down Payment",
-      type: "number" as const,
-      placeholder: "Enter down payment",
-      section: "Course Information",
-    },
-    {
       name: "courses.numberOfInstallments",
       label: "Number of Installments",
       type: "number" as const,
@@ -325,7 +317,6 @@ export default function StudentPage() {
       flattened["courses.selectedCourse"] =
         student.courses.selectedCourse || "";
       flattened["courses.totalFees"] = student.courses.totalFees || "";
-      flattened["courses.downPayment"] = student.courses.downPayment || "";
       flattened["courses.numberOfInstallments"] =
         student.courses.numberOfInstallments || "";
       flattened["courses.feePerInstallment"] =
