@@ -2,130 +2,133 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { fetchCourseAttendance } from "@/services/attendanceService";
+import http from "@/services/http";
+import TeacherHeader from "@/components/TeacherHeader";
 
-interface StudentAttendance {
-  srNo: number;
-  name: string;
-  contact: string;
-  attendance: Record<string, string>;
+interface Course {
+  _id: string;
+  courseName: string;
+  courseId: string;
 }
 
-interface AttendanceResponse {
-  lectures: string[];
-  students: {
-    name: string;
-    contact: string;
-    attendance: Record<string, string>;
-  }[];
+interface Student {
+  _id: string;
+  fullName: string;
+  phone: string;
+  email: string;
 }
 
-export default function CourseStudentsPage() {
-  const { courseId } = useParams();
-  const router = useRouter();
+export default function CourseSelectionPage() {
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [selectedCourseId, setSelectedCourseId] = useState<string>("");
+  const [students, setStudents] = useState<Student[]>([]);
+  const [loadingCourses, setLoadingCourses] = useState(false);
+  const [loadingStudents, setLoadingStudents] = useState(false);
+  const [error, setError] = useState("");
 
-  const [students, setStudents] = useState<StudentAttendance[]>([]);
-  const [lectures, setLectures] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string>("");
+  // 🔹 Fetch all courses
+  const loadCourses = async () => {
+    try {
+      setLoadingCourses(true);
+      const res = await http.get("/courses?limit=500");
+      setCourses(res.data.courses || []);
+      setError("");
+    } catch (err: any) {
+      console.error("Failed to load courses:", err);
+      setError("Failed to load courses.");
+    } finally {
+      setLoadingCourses(false);
+    }
+  };
+
+  // 🔹 Fetch students for selected course
+  const loadStudents = async (courseId: string) => {
+    if (!courseId) {
+      setStudents([]);
+      return;
+    }
+
+    try {
+      setLoadingStudents(true);
+      const res = await http.get(`/api/students/course/${courseId}`);
+      setStudents(res.data.students || []);
+      setError("");
+    } catch (err: any) {
+      console.error("Failed to load students:", err);
+      setError("Failed to load students.");
+      setStudents([]);
+    } finally {
+      setLoadingStudents(false);
+    }
+  };
 
   useEffect(() => {
-    const loadAttendance = async () => {
-      try {
-        setLoading(true);
-        setError("");
+    loadCourses();
+  }, []);
 
-        const data: AttendanceResponse = await fetchCourseAttendance(String(courseId));
-
-        setLectures(data.lectures || []);
-
-        const mappedStudents = data.students.map((s, index) => ({
-          srNo: index + 1,
-          name: s.name,
-          contact: s.contact,
-          attendance: s.attendance || {},
-        }));
-
-        setStudents(mappedStudents);
-      } catch (err: any) {
-        setError(err.message || "Something went wrong.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (courseId) loadAttendance();
-  }, [courseId]);
-
-  if (loading) {
-    return <p className="text-center mt-10 text-gray-500">Loading...</p>;
-  }
-
-  if (error) {
-    return (
-      <div className="text-center mt-10 text-red-500">
-        <p>{error}</p>
-        <button
-          className="mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-          onClick={() => router.push("/instructor/dashboard")}
-        >
-          Back to Dashboard
-        </button>
-      </div>
-    );
-  }
+  useEffect(() => {
+    loadStudents(selectedCourseId);
+  }, [selectedCourseId]);
 
   return (
-    <div className="p-6">
-      {/* Page Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Course ID: {courseId}</h1>
+    <div className="min-h-screen bg-gray-50">
+      <TeacherHeader pageTitle="Course Selection" breadcrumb="Courses" />
 
-        <button
-          onClick={() => router.push("/instructor/dashboard")}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition"
-        >
-          Back
-        </button>
-      </div>
+      <div className="p-6 mt-6">
+        <h1 className="text-2xl font-bold mb-5">Select a Course</h1>
 
-      {/* Attendance Table */}
-      <div className="overflow-x-auto border rounded-lg shadow-sm">
-        <table className="min-w-full text-sm divide-y divide-gray-200">
-          <thead className="bg-blue-100 sticky top-0">
-            <tr>
-              <th className="px-3 py-2 font-medium text-gray-700">SR#</th>
-              <th className="px-3 py-2 font-medium text-gray-700">Name</th>
-              <th className="px-3 py-2 font-medium text-gray-700">Contact</th>
-
-              {lectures.map((lec) => (
-                <th
-                  key={lec}
-                  className="px-3 py-2 font-medium text-gray-700 text-center whitespace-nowrap"
-                >
-                  {lec}
-                </th>
-              ))}
-            </tr>
-          </thead>
-
-          <tbody className="bg-white divide-y divide-gray-200">
-            {students.map((s) => (
-              <tr key={s.srNo}>
-                <td className="px-3 py-2">{s.srNo}</td>
-                <td className="px-3 py-2">{s.name}</td>
-                <td className="px-3 py-2">{s.contact}</td>
-
-                {lectures.map((lec) => (
-                  <td key={lec} className="px-3 py-2 text-center">
-                    {s.attendance[lec] || "-"}
-                  </td>
-                ))}
-              </tr>
+        {/* Course Dropdown */}
+        <div className="flex items-center gap-2 mb-6">
+          <label htmlFor="selectcourse">Select Course:</label>
+          <select
+            id="selectcourse"
+            className="border px-3 py-2 rounded"
+            value={selectedCourseId}
+            onChange={(e) => setSelectedCourseId(e.target.value)}
+          >
+            <option value="">-- Select Course --</option>
+            {courses.map((course) => (
+              <option key={course._id} value={course.courseId}>
+                {course.courseName} ({course.courseId})
+              </option>
             ))}
-          </tbody>
-        </table>
+          </select>
+        </div>
+
+        {/* Loading/Error */}
+        {loadingCourses && <p>Loading courses...</p>}
+        {loadingStudents && <p>Loading students...</p>}
+        {error && <p className="text-red-500">{error}</p>}
+
+        {/* Students Table */}
+        {!loadingStudents && students.length > 0 && (
+          <div className="overflow-x-auto border rounded-lg shadow-sm mt-4">
+            <table className="min-w-full text-sm divide-y divide-gray-200">
+              <thead className="bg-blue-100 sticky top-0">
+                <tr>
+                  <th className="px-3 py-2 text-left">#</th>
+                  <th className="px-3 py-2 text-left">Full Name</th>
+                  <th className="px-3 py-2 text-left">Phone</th>
+                  <th className="px-3 py-2 text-left">Email</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {students.map((s, idx) => (
+                  <tr key={s._id}>
+                    <td className="px-3 py-2">{idx + 1}</td>
+                    <td className="px-3 py-2">{s.fullName}</td>
+                    <td className="px-3 py-2">{s.phone}</td>
+                    <td className="px-3 py-2">{s.email}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {!loadingStudents && selectedCourseId && students.length === 0 && !error && (
+          <p>No students enrolled in this course.</p>
+        )}
       </div>
     </div>
   );

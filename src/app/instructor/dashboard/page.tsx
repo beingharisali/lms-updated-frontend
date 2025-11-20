@@ -2,11 +2,12 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import CourseCard, { Course } from "../CourseCard/page";
 import SearchBar from "../SearchBar/page";
-import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/context/AuthContext";
-import { fetchAllInstructorCourses } from "@/services/instructorcourseService";
+import { fetchAllInstructorCourses } from "@/services/courseService";
+import TeacherHeader from "@/components/TeacherHeader";
 
 export default function InstructorDashboardPage() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -33,17 +34,21 @@ export default function InstructorDashboardPage() {
 
         const data = await fetchAllInstructorCourses();
 
+        console.log("All instructor courses fetched:", data.courses);
+
         const mapped: Course[] = data.courses.map((c: any) => ({
-          id: c.courseId,
+          id: c._id || c.courseId,
           code: c.courseName,
           lectures: c.totalLectures,
           enrolled: c.noOfStudentsEnrolled,
           otherStudents: c.freezedStudents || 0,
           resources: 0,
+          mongoCourseId: c.courseId,
         }));
 
         setCourses(mapped);
       } catch (err: any) {
+        console.error("Error loading courses:", err);
         setError(err.message || "Something went wrong");
       } finally {
         setLoadingCourses(false);
@@ -64,47 +69,54 @@ export default function InstructorDashboardPage() {
     );
   }, [query, courses]);
 
-  /**  Open Course Details Page */
+  /** ➡ Open Course Details Page */
   const handleSelect = (course: Course) => {
+    console.log("Selected course sent to backend:", course.id);
     router.push(`/instructor/courses/${course.id}`);
   };
 
   return (
-    <div className="p-8">
+    <div className="min-h-screen bg-gray-50">
+      {/* Teacher Header */}
+      <TeacherHeader
+        pageTitle="Instructor Dashboard"
+        breadcrumb="Dashboard"
+      />
 
-      {/* Search Bar */}
-      <div className="mb-8">
-        <SearchBar value={query} onChange={setQuery} />
-      </div>
-
-      {/* Loading State */}
-      {loadingCourses && (
-        <div className="text-center text-gray-500">Loading courses...</div>
-      )}
-
-      {/* Error State */}
-      {error && (
-        <div className="text-center text-red-500">{error}</div>
-      )}
-
-      {/* No Results */}
-      {!loadingCourses && !error && filtered.length === 0 && (
-        <div className="text-center text-gray-500">No courses found.</div>
-      )}
-
-      {/* Course Grid */}
-      {!loadingCourses && !error && filtered.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((course) => (
-            <CourseCard
-              key={course.id}
-              course={course}
-              onSelect={handleSelect}
-            />
-          ))}
+      <div className="p-8 mt-6">
+        {/* Search Bar */}
+        <div className="mb-8">
+          <SearchBar value={query} onChange={setQuery} />
         </div>
-      )}
 
+        {/* Loading State */}
+        {loadingCourses && (
+          <div className="text-center text-gray-500">Loading courses...</div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="text-center text-red-500">{error}</div>
+        )}
+
+        {/* No Results */}
+        {!loadingCourses && !error && filtered.length === 0 && (
+          <div className="text-center text-gray-500">No courses found.</div>
+        )}
+
+        {/* Course Grid */}
+        {!loadingCourses && !error && filtered.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((course) => (
+              <CourseCard
+                key={course.id}
+                course={course}
+                onSelect={handleSelect}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
